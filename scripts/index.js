@@ -6,6 +6,7 @@ const API_KEY = 'AIzaSyCuZ6xN1-llq_th1_WS_z894UJl_qjzL90';
 // {
 //       id: '98ds8fbsdy67',
 //       title: 
+//       thumbnail: 
 // }
 
 const store = {
@@ -25,15 +26,15 @@ const fetchVideos = function(searchTerm, callback) {
   const query = {
     part: 'snippet',
     key: API_KEY,
-    q: searchTerm
+    q: `${searchTerm}`
   }
   $.getJSON(BASE_URL, query, callback);
 };
 
 //test
-// fetchVideos('batman', (response) => {
-//   console.log(response);
-// });
+fetchVideos('cat', (response) => {
+  decorateResponse(response);
+});
 
 
 // TASK:
@@ -45,15 +46,25 @@ const fetchVideos = function(searchTerm, callback) {
 // TEST IT! Grab an example API response and send it into the function - make sure
 // you get back the object you want.
 const decorateResponse = function(response) {
-
+  const results = response.items.map(video => {
+    return {
+      id: video.id.videoId,
+      title: video.snippet.title,
+      thumbnail: video.snippet.thumbnails.default.url
+    }
+  });
+  console.log(results);
 };
+
 
 // TASK:
 // 1. Create a `generateVideoItemHtml` function that receives the decorated object
 // 2. Using the object, return an HTML string containing all the expected data
 // TEST IT!
 const generateVideoItemHtml = function(video) {
-
+  return `<p>${video.id}</p>
+          <p>${video.title}</p>
+          <img src=${video.thumbnail}>`;
 };
 
 // TASK:
